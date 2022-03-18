@@ -1,40 +1,35 @@
 <html>
   <head>
+    <title>Météo</title>
+    <meta charset="utf-8" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js" > </script>
     <script>
-      function callMeteo():
+      async function callMeteo ()
       {
-        const http = require("https");
-
-        const options = {
-          "method": "GET",
-          "hostname": "community-open-weather-map.p.rapidapi.com",
-          "port": null,
-          "path": "/weather?q=London%2Cuk&lat=0&lon=0&callback=test&id=2172797&lang=null&units=imperial&mode=xml",
-          "headers": {
-            "x-rapidapi-host": "community-open-weather-map.p.rapidapi.com",
-            "x-rapidapi-key": "76365ce905msh74b1f18ab4d74bdp18eb77jsnfe25b1f762c5",
-            "useQueryString": true
+        const response = await axios.get(
+          'https://community-open-weather-map.p.rapidapi.com/weather?q=London%2Cuk&lat=0&lon=0&callback=test&id=2172797&lang=null&units=imperial&mode=xml',
+          {
+            headers: {
+              'x-rapidapi-host': 'community-open-weather-map.p.rapidapi.com',
+              'x-rapidapi-key':'76365ce905msh74b1f18ab4d74bdp18eb77jsnfe25b1f762c5',
+              useQueryString: true
+            }
           }
-        };
+        )
 
-        const req = http.request(options, function (res) {
-          const chunks = [];
-
-          res.on("data", function (chunk) {
-            chunks.push(chunk);
-          });
-
-          res.on("end", function () {
-            const body = Buffer.concat(chunks);
-            console.log(body.toString());
-          });
-        });
-
-        req.end();
+        console.log(response)
+        var city = JSON.stringify(response)
+        
+        document.getElementById('test').append(city)
       }
     </script>
   </head>
+
   <body>
-    <script>callMeteo()</script>
+    <h1>Ceci est un test</h1>
+    <script>
+      callMeteo()
+    </script>
+    <p id='test'></p>
   </body>
 </html>
