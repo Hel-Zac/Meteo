@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>OpenWeatherMap</title>
+    <script>
+    function lister(data)
+    {
+      //document.write(JSON.stringify(data));
+      if(data !== null)
+      {
+        console.log("ici");
+        data = data.data.list[0];
+        const page = document.createElement('div');
+        const title = document.createElement("h2");
+        title.textContent = data.name;
+        page.appendChild(title);
+        const country = document.createElement("h4");
+        country.textContent = "(" + data.sys.country + ")";
+        page.appendChild(country);
+
+        const table = document.createElement('table');
+
+        const header = document.createElement('thead');
+        const headLine = document.createElement('tr');
+        const colonnes = ["Temperature", "Humidity", "Pressure", "Clouds", "Wind speed", "Wind degree", "Weather", "Description"];
+        for (col in colonnes)
+        {
+          const colName = document.createElement('th');
+          colName.textContent = colonnes[col];
+          headLine.appendChild(colName);
+        }
+        header.appendChild(headLine);
+        table.appendChild(header);
+
+        const tBody = document.createElement('tbody');
+
+        const line = document.createElement('tr');
+        const col_2 = document.createElement('td');
+        col_2.textContent = data.main.temp + "°";
+        line.appendChild(col_2);
+        const col_3 = document.createElement('td');
+        col_3.textContent = data.main.humidity + "%";
+        line.appendChild(col_3);
+        const col_4 = document.createElement('td');
+        col_4.textContent = data.main.pressure + " atm";
+        line.appendChild(col_4);
+        const col_5 = document.createElement('td');
+        col_5.textContent = data.clouds.all + "%";
+        line.appendChild(col_5);
+        const col_6 = document.createElement('td');
+        col_6.textContent = data.wind.speed + " m/s";
+        line.appendChild(col_6);
+        const col_7 = document.createElement('td');
+        col_7.textContent = data.wind.deg + "°";
+        line.appendChild(col_7);
+        const col_8 = document.createElement('td');
+        col_8.textContent = data.weather[0].main;
+        line.appendChild(col_8);
+        const col_9 = document.createElement('td');
+        col_9.textContent = data.weather[0].description;
+        line.appendChild(col_9);
+        tBody.appendChild(line);
+
+        table.appendChild(tBody);//*/
+
+        page.appendChild(table);
+        document.write(page.outerHTML);
+      }
+      else
+      {
+        document.write("No data");
+        console.log("dommage");
+      }//*/
+    }
+    </script>
+  </head>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      socket.on('info', function(d)
+        {
+          var data = d;
+          lister(data);
+        });
+    </script>
+    </body>
+</html>
