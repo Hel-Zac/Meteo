@@ -10,7 +10,7 @@ var fs=require('fs');
 var list_cities=fs.readFileSync('city_list.json', 'utf8');
 list_cities=JSON.parse(list_cities);//liste de toutes les villes de l'api
 
-number_city = list_cities.lengh;
+number_city = list_cities.length;
 var random = Math.floor(Math.random() * number_city)//tirer au sort un numéro pour voir quelle ville afficher
 city_view = list_cities[random];//charger la ville
 console.log(city_view);//vérifier que la ville est la bonne
