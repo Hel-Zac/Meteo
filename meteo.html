@@ -6,66 +6,85 @@
     <script>
     function lister(data)
     {
-      //document.write(JSON.stringify(data));
       if(data !== null)
       {
-        console.log("ici");
-        data = data.data.list[0];
-        const page = document.createElement('div');
-        const title = document.createElement("h2");
-        title.textContent = data.name;
-        page.appendChild(title);
-        const country = document.createElement("h4");
-        country.textContent = "(" + data.sys.country + ")";
-        page.appendChild(country);
+        if(data.data.message === "accurate")
+         {
+          console.log(data);
+          city = data.data.list[0];
+          const page = document.createElement('div');
+          const title = document.createElement("h2");
+          title.textContent = city.name;
+          page.appendChild(title);
+          const country = document.createElement("h4");
+          country.textContent = "(" + city.sys.country + ")";
+          page.appendChild(country);
 
-        const table = document.createElement('table');
+          const table_temp = document.createElement('table');
+          const header = document.createElement('tr');
+          const title_tab = document.createElement('th');
+          title_tab.textContent = "Temperature feeling: " + city.main.feels_like + "°";
+          title_tab.setAttribute("colspan", 3);
+          header.appendChild(title_tab);
+          table_temp.appendChild(header);
+          const body_tab = document.createElement('tr');
+          const temp_min = document.createElement('td');
+          temp_min.setAttribute("class", "blue");
+          temp_min.textContent = city.main.temp_min + "°";
+          body_tab.appendChild(temp_min);
+          const true_temp = document.createElement('td');
+          true_temp.textContent = city.main.temp + "°";
+          body_tab.appendChild(true_temp);
+          const temp_max = document.createElement('td');
+          temp_max.textContent = city.main.temp_max + "°";
+          body_tab.appendChild(temp_max);
 
-        const header = document.createElement('thead');
-        const headLine = document.createElement('tr');
-        const colonnes = ["Temperature", "Humidity", "Pressure", "Clouds", "Wind speed", "Wind degree", "Weather", "Description"];
-        for (col in colonnes)
-        {
-          const colName = document.createElement('th');
-          colName.textContent = colonnes[col];
-          headLine.appendChild(colName);
+          table_temp.appendChild(body_tab);
+          page.appendChild(table_temp);
+
+          const table = document.createElement('table');
+
+          const headLine = document.createElement('tr');
+          const colonnes = ["Humidity", "Clouds", "Wind speed"];
+          for (col in colonnes)
+          {
+            const colName = document.createElement('th');
+            colName.textContent = colonnes[col];
+            headLine.appendChild(colName);
+          }
+          table.appendChild(headLine);
+
+          const line = document.createElement('tr');
+          const col_3 = document.createElement('td');
+          col_3.textContent = city.main.humidity + "%";
+          line.appendChild(col_3);
+          const col_5 = document.createElement('td');
+          col_5.textContent = city.clouds.all + "%";
+          line.appendChild(col_5);
+          const col_6 = document.createElement('td');
+          col_6.textContent = city.wind.speed + " m/s";
+          line.appendChild(col_6);
+
+          table.appendChild(line);//*/
+
+          page.appendChild(table);
+          var image = document.createElement('img');
+          image.src= `http://openweathermap.org/img/w/${city.weather[0].icon}.png`;
+          image.alt= city.weather[0].main;
+          page.appendChild(image);
+          const weather = document.createElement('p');
+          weather.textContent = city.weather[0].description;
+          page.appendChild(weather);
+          //vide la page de son contenu
+          document.open ();
+          document.close ();
+          //écrit le nouveau contenu
+          document.write(page.outerHTML);
         }
-        header.appendChild(headLine);
-        table.appendChild(header);
-
-        const tBody = document.createElement('tbody');
-
-        const line = document.createElement('tr');
-        const col_2 = document.createElement('td');
-        col_2.textContent = data.main.temp + "°";
-        line.appendChild(col_2);
-        const col_3 = document.createElement('td');
-        col_3.textContent = data.main.humidity + "%";
-        line.appendChild(col_3);
-        const col_4 = document.createElement('td');
-        col_4.textContent = data.main.pressure + " atm";
-        line.appendChild(col_4);
-        const col_5 = document.createElement('td');
-        col_5.textContent = data.clouds.all + "%";
-        line.appendChild(col_5);
-        const col_6 = document.createElement('td');
-        col_6.textContent = data.wind.speed + " m/s";
-        line.appendChild(col_6);
-        const col_7 = document.createElement('td');
-        col_7.textContent = data.wind.deg + "°";
-        line.appendChild(col_7);
-        const col_8 = document.createElement('td');
-        col_8.textContent = data.weather[0].main;
-        line.appendChild(col_8);
-        const col_9 = document.createElement('td');
-        col_9.textContent = data.weather[0].description;
-        line.appendChild(col_9);
-        tBody.appendChild(line);
-
-        table.appendChild(tBody);//*/
-
-        page.appendChild(table);
-        document.write(page.outerHTML);
+        else
+        {
+          document.write(data.data.message);
+        }
       }
       else
       {
